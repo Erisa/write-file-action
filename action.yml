@@ -11,7 +11,7 @@ inputs:
     required: true
 
   write-mode:
-    description: "The mode of writing to use: `overwrite`, `append`, or `preserve`."
+    description: "The mode of writing to use: `overwrite`, `append`, `append-newline` or `preserve`."
     required: false
     default: preserve
 outputs:

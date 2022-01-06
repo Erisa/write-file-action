@@ -1,6 +1,7 @@
 import { getInput, setFailed, setOutput } from "@actions/core";
 import { mkdirP } from "@actions/io";
 import { appendFile, exists, writeFile, stat } from "fs";
+import { readFile } from "fs/promises"
 import { dirname, join as joinPath, resolve as resolvePath } from "path";
 import { promisify } from "util";
 
@@ -14,11 +15,11 @@ main().catch((error) => setFailed(error.message));
 async function main() {
   try {
     const path = getInput("path", { required: true });
-    const contents = getInput("contents", { required: true });
+    let contents = getInput("contents", { required: true });
     const mode = (getInput("write-mode") || "append").toLocaleLowerCase();
 
     // Ensure the correct mode is specified
-    if (mode !== "append" && mode !== "overwrite" && mode !== "preserve") {
+    if (mode !== "append" && mode !== "append-newline" && mode !== "overwrite" && mode !== "preserve") {
       setFailed("Mode must be one of: overwrite, append, or preserve");
       return;
     }
@@ -36,13 +37,27 @@ async function main() {
 
     if (mode === "overwrite") {
       await writeFileAsync(path, contents);
-    } else {
+    } else if (mode == "append-newline"){
+      const fileData = (await readFile(path)).toString();
+      // only add a newline if one is necessary, don't introduce empty lines
+      if (fileData.endsWith("\n") || fileData.endsWith("\r\n") || fileData.endsWith("\r")){
+        // this code assumes lf is wanted because it's what i (Erisa) needed
+        contents = "\n" + contents;
+      }
+      // if the input doesn't end with a newline, add one of those as well
+      if (contents.endsWith("\n") || contents.endsWith("\r\n") || contents.endsWith("\r")){
+        contents += "\n";
+      }
+
+      await appendFileAsync(path, contents);
+    }
+    else {
       await appendFileAsync(path, contents);
     }
 
     const statResult = await statAsync(path);
     setOutput("size", `${statResult.size}`);
-  } catch (error) {
+  } catch (error: any) {
     setFailed(error.message);
   }
 }

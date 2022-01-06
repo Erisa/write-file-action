@@ -22,7 +22,7 @@ jobs:
           path: ${{ env.BASHRC_PATH }}
           contents: |
             echo "Hello World!"
-          write-mode: append
+          write-mode: append-newline
       - uses: actions/upload-artifact@v2
         with:
           name: profile
