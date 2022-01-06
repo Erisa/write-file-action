@@ -17,7 +17,7 @@ jobs:
       - name: echo .bashrc path
         shell: pwsh
         run: echo "$env:BASHRC_PATH"
-      - uses: DamianReeves/write-file-action@master
+      - uses: Erisa/write-file-action@master
         with:
           path: ${{ env.BASHRC_PATH }}
           contents: |
