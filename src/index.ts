@@ -39,16 +39,15 @@ async function main() {
       await writeFileAsync(path, contents);
     } else if (mode == "append-newline"){
       const fileData = (await readFile(path)).toString();
-      console.log(fileData)
       // only add a newline if one is necessary, don't introduce empty lines
-      if (!(fileData.endsWith("\n") || fileData.endsWith("\r\n") || fileData.endsWith("\r"))){
+      if (!endsInNewlines(fileData)){
         // this code assumes lf is wanted because it's what i (Erisa) needed
-        console.log("thought it ended in newline")
+        console.log("thought it didnt end in newline")
         contents = "\n" + contents;
       }
       // if the input **doesn't** end with a newline, add one of those as well
-      if (!(contents.endsWith("\n") || contents.endsWith("\r\n") || contents.endsWith("\r"))){
-        console.log("thought input ended in newline")
+      if (!endsInNewlines(contents)){
+        console.log("thought input didnt end in newline")
         contents += "\n";
       }
 
@@ -62,5 +61,13 @@ async function main() {
     setOutput("size", `${statResult.size}`);
   } catch (error: any) {
     setFailed(error.message);
+  }
+}
+
+function endsInNewlines(text: string){
+  if (text.endsWith("\n") || text.endsWith("\r") || text.endsWith("\r\n")){
+    return true;
+  } else {
+    return false;
   }
 }
