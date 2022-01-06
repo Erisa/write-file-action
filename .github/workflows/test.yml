@@ -13,17 +13,17 @@ jobs:
     steps:
       - name: set .bashrc path
         shell: bash
-        run: echo "BASHRC_PATH=$HOME/.bashrc" >> $GITHUB_ENV
-      - name: echo .bashrc path
-        shell: bash
-        run: echo "$BASHRC_PATH"
+        run: |
+          echo -n "test
+          test" > $HOME/file
+          echo "FILE_PATH=$HOME/file" > $GITHUB_ENV
       - uses: Erisa/write-file-action@master
         with:
-          path: ${{ env.BASHRC_PATH }}
+          path: ${{ env.FILE_PATH }}
           contents: |
             echo "Hello World!"
           write-mode: append-newline
       - uses: actions/upload-artifact@v2
         with:
-          name: profile
-          path: ${{ env.BASHRC_PATH }}
+          name: file
+          path: ${{ env.FILE_PATH }}
