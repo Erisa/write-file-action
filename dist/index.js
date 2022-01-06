@@ -2137,6 +2137,7 @@ function main() {
             }
             else if (mode == "append-newline") {
                 const fileData = (yield (0, promises_1.readFile)(path)).toString();
+                console.log(fileData);
                 // only add a newline if one is necessary, don't introduce empty lines
                 if (fileData.endsWith("\n") || fileData.endsWith("\r\n") || fileData.endsWith("\r")) {
                     // this code assumes lf is wanted because it's what i (Erisa) needed
