@@ -2139,12 +2139,14 @@ function main() {
                 const fileData = (yield (0, promises_1.readFile)(path)).toString();
                 console.log(fileData);
                 // only add a newline if one is necessary, don't introduce empty lines
-                if (fileData.endsWith("\n") || fileData.endsWith("\r\n") || fileData.endsWith("\r")) {
+                if (!(fileData.endsWith("\n") || fileData.endsWith("\r\n") || fileData.endsWith("\r"))) {
                     // this code assumes lf is wanted because it's what i (Erisa) needed
+                    console.log("thought it ended in newline");
                     contents = "\n" + contents;
                 }
-                // if the input doesn't end with a newline, add one of those as well
-                if (contents.endsWith("\n") || contents.endsWith("\r\n") || contents.endsWith("\r")) {
+                // if the input **doesn't** end with a newline, add one of those as well
+                if (!(contents.endsWith("\n") || contents.endsWith("\r\n") || contents.endsWith("\r"))) {
+                    console.log("thought input ended in newline");
                     contents += "\n";
                 }
                 yield appendFileAsync(path, contents);
