@@ -59,8 +59,8 @@ async function main() {
 
     const statResult = await statAsync(path);
     setOutput("size", `${statResult.size}`);
-  } catch (error: any) {
-    setFailed(error.message);
+  } catch (error) {
+    setFailed((error as Error).message);
   }
 }
 
