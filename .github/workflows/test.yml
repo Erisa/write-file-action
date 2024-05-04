@@ -22,7 +22,7 @@ jobs:
           contents: |
             echo "Hello World!"
           write-mode: append-newline
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: file
           path: ${{ env.FILE_PATH }}
